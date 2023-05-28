@@ -1,9 +1,10 @@
 # M10
 
 ## Scripts del ejercicio final
-* script_Evil_Corp.sql
+* all_database.sql
 * Evil_corp_diagram.dia
 
+Es posible que si intentas insertar todo de golpe no se pueda, ya que he probado y a veces da error debido a la longitud del script, recomiendo insertar las views, funciones y procedimientos a parte.
 
 ## Scripts que hemos ido haciendo en clase:
 * add_weapons.sql
