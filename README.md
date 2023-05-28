@@ -3,6 +3,7 @@
 ## Scripts del ejercicio final
 * all_database.sql
 * Evil_corp_diagram.dia
+* parca_user.sql
 
 Es posible que si intentas insertar todo de golpe no se pueda, ya que he probado y a veces da error debido a la longitud del script, recomiendo insertar las views, funciones y procedimientos a parte.
 
