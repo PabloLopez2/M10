@@ -2,7 +2,7 @@
 CREATE DATABASE Evil_Corp;
 USE Evil_Corp;
 
--- Drops
+-- TODOS LOS DROPS DE LA TABLA
 DROP TABLE IF EXISTS users_addresses;
 DROP TABLE IF EXISTS treatments;
 DROP TABLE IF EXISTS diagnoses;
@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS countries;
 DROP TABLE IF EXISTS planets;
 DROP TABLE IF EXISTS galaxies;
 
--- Tables
+-- TODAS LAS TABLAS DE BBD
 CREATE TABLE users (
     id_user INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(64) NOT NULL,
@@ -115,6 +115,13 @@ CREATE TABLE planets (
     id_galaxy INT UNSIGNED NOT NULL
 );
 
+ALTER TABLE medicines ADD COLUMN id_planet INT UNSIGNED NOT NULL;
+UPDATE medicines SET id_planet = 1; -- Asigna el planeta 1 a los medicamentos existentes
+ALTER TABLE medicines ADD COLUMN id_civilization INT UNSIGNED NOT NULL;
+UPDATE medicines SET id_civilization = 1; -- Asigna la civilización 1 a los medicamentos existentes
+
+
+
 CREATE TABLE galaxies (
     id_galaxy INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     galaxy_name VARCHAR(64) NOT NULL
@@ -154,10 +161,19 @@ CREATE TABLE civilizations (
     id_civilization INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50),
     planet VARCHAR(50),
+    people INT UNSIGNED,
     dead BOOLEAN DEFAULT false
 );
+-- Todas las civilizaciones de todos los planetas
+ALTER TABLE civilizations ADD COLUMN id_planet INT UNSIGNED;
+UPDATE civilizations
+JOIN planets ON civilizations.planet = planets.planet
+SET civilizations.id_planet = planets.id_planet;
 
--- InserciÃ³n de datos en la tabla users
+-- 
+
+
+-- Inserción de datos en la tabla users
 INSERT INTO users (username, first_name, last_name, email, password, country, birth_date)
 VALUES
     ('user1', 'John', 'Doe', 'john.doe@example.com', 'password123', 'USA', '1990-05-15'),
@@ -167,16 +183,16 @@ VALUES
     ('user5', 'Daniel', 'Davis', 'daniel.davis@example.com', 'passwordxyz', 'GER', '1997-06-18');
 
 
--- InserciÃ³n de datos en la tabla medicines
-INSERT INTO medicines (medicine, cost, price)
+-- Inserción de datos en la tabla medicines
+INSERT INTO medicines (medicine, cost, price, id_planet)
 VALUES
-    ('Aspirina', 5.99, 9.99),
-    ('Paracetamol', 3.49, 6.99),
-    ('Ibuprofeno', 4.99, 8.99),
-    ('Amoxicilina', 7.99, 12.99),
-    ('Omeprazole', 6.49, 10.99);
+    ('Aspirina', 5.99, 9.99, 2),
+    ('Paracetamol', 3.49, 6.99, 3),
+    ('Ibuprofeno', 4.99, 8.99, 3),
+    ('Amoxicilina', 7.99, 12.99, 2),
+    ('Omeprazole', 6.49, 10.99, 1);
 
--- InserciÃ³n de datos en la tabla doctors
+-- Inserción de datos en la tabla doctors
 INSERT INTO doctors (doctor)
 VALUES
     ('Dr. Smith'),
@@ -185,7 +201,7 @@ VALUES
     ('Dr. Brown'),
     ('Dr. Davis');
 
--- InserciÃ³n de datos en la tabla conditions
+-- Inserción de datos en la tabla conditions
 INSERT INTO conditions (condicion, symptoms, description, deadly)
 VALUES
     ('Cold', 'Sneezing, coughing', 'Common viral infection', false),
@@ -194,7 +210,7 @@ VALUES
     ('Diabetes', 'High blood sugar levels', 'Metabolic disorder', true),
     ('Asthma', 'Shortness of breath, wheezing', 'Chronic respiratory condition', false);
 
--- InserciÃ³n de datos en la tabla diagnoses
+-- Inserción de datos en la tabla diagnoses
 INSERT INTO diagnoses (diagnosis, datetime, id_doctor, id_user, id_condition)
 VALUES
     ('Common cold', '2023-05-28 10:00:00', 1, 1, 1),
@@ -203,11 +219,11 @@ VALUES
     ('Type 2 diabetes', '2023-05-31 16:45:00', 4, 4, 4),
     ('Asthma exacerbation', '2023-06-01 11:30:00', 5, 5, 5);
 
--- InserciÃ³n de datos en la tabla treatments
+-- Inserción de datos en la tabla treatments
 INSERT INTO treatments (id_condition, id_diagnosis, id_medicine)
 VALUES (1, 1, 1);
 
--- InserciÃ³n de datos en la tabla countries
+-- Inserción de datos en la tabla countries
 INSERT INTO countries (country)
 VALUES
     ('USA'),
@@ -221,7 +237,7 @@ VALUES
     ('JPN'),
     ('AUS');
 
--- InserciÃ³n de datos en la tabla cities
+-- Inserción de datos en la tabla cities
 INSERT INTO cities (city, id_country)
 VALUES
     ('New York', 1),
@@ -236,7 +252,7 @@ VALUES
     ('Sydney', 10);
 
 
--- InserciÃ³n de datos en la tabla streets
+-- Inserción de datos en la tabla streets
 INSERT INTO streets (street, id_city)
 VALUES
     ('Main Street', 1),
@@ -244,13 +260,13 @@ VALUES
     ('First Avenue', 2),
     ('Queen Street', 2),
     ('Revolution Square', 3),
-    ('Champs-Ã‰lysÃ©es', 4),
+    ('Champs-Élysées', 4),
     ('Brandenburg Gate', 5),
-    ('Gran VÃ­a', 6),
+    ('Gran Vía', 6),
     ('Via del Corso', 8),
     ('Ginza', 9);
 
--- InserciÃ³n de datos en la tabla streets_numbers
+-- Inserción de datos en la tabla streets_numbers
 INSERT INTO streets_numbers (street_number)
 VALUES
     ('123'),
@@ -264,7 +280,7 @@ VALUES
     ('777'),
     ('1001');
 
--- InserciÃ³n de datos en la tabla staircases
+-- Inserción de datos en la tabla staircases
 INSERT INTO staircases (staircase)
 VALUES
     ('A'),
@@ -279,7 +295,7 @@ VALUES
     ('J');
 
 
--- InserciÃ³n de datos en la tabla floors
+-- Inserción de datos en la tabla floors
 INSERT INTO floors (`floor`)
 VALUES
     ('1st Floor'),
@@ -293,7 +309,7 @@ VALUES
     ('9th Floor'),
     ('10th Floor');
 
--- InserciÃ³n de datos en la tabla doors
+-- Inserción de datos en la tabla doors
 INSERT INTO doors (door)
 VALUES
     ('101'),
@@ -307,7 +323,7 @@ VALUES
     ('204'),
     ('205');
 
--- InserciÃ³n de datos en la tabla zip_codes
+-- Inserción de datos en la tabla zip_codes
 INSERT INTO zip_codes (zip_code)
 VALUES
     ('10001'),
@@ -322,7 +338,7 @@ VALUES
     ('20005');
    
     
--- InserciÃ³n en la tabla galaxies
+-- Inserción en la tabla galaxies
 
 INSERT INTO galaxies (galaxy_name) VALUES
 ('Andromeda'),
@@ -331,7 +347,7 @@ INSERT INTO galaxies (galaxy_name) VALUES
 ('Sombrero'),
 ('Pinwheel');
 
--- InserciÃ³n de datos en la tabla planets
+-- Inserción de datos en la tabla planets
 
 INSERT INTO planets (planet, id_galaxy)
 VALUES
@@ -347,22 +363,144 @@ VALUES
     ('Eris', 3);
 
 
--- InserciÃ³n de datos en la tabla addresses
+-- Inserción de datos en la tabla addresses
 INSERT INTO addresses (id_street, id_street_number, id_staircase, id_floor, id_door, id_zip_code, id_planet, id_galaxy)
 VALUES (1, 1, 1, 1, 1, 1, 1, 1);
 
--- InserciÃ³n de datos en la tabla civilizations
-INSERT INTO civilizations (name, planet, dead)
+-- Inserción de datos en la tabla civilizations
+INSERT INTO civilizations (name, planet, people, dead)
 VALUES
-    ('Zephyrians', 'Zephyria', false),
-    ('Aquanites', 'Atlantia', false),
-    ('Celestials', 'Astralis', false),
-    ('Infernites', 'Pyrovia', false),
-    ('Verdantians', 'Florania', false),
-    ('Lunarians', 'Lunaris', false),
-    ('Technocrats', 'Mechanica', false),
-    ('Shadowfellians', 'Umbrath', true),
-    ('Sylvanians', 'Arboria', false),
-    ('Crystalites', 'Crystallis', false);
+    ('Zephyrians', 'Zephyria', 250000, false),
+    ('Aquanites', 'Atlantia', 1000000, false),
+    ('Celestials', 'Astralis', 500000, false),
+    ('Infernites', 'Pyrovia', 750000, false),
+    ('Verdantians', 'Florania', 300000, false),
+    ('Lunarians', 'Lunaris', 200000, false),
+    ('Technocrats', 'Mechanica', 800000, false),
+    ('Shadowfellians', 'Umbrath', 50000, true),
+    ('Sylvanians', 'Arboria', 400000, false),
+    ('Crystalites', 'Crystallis', 600000, false);
+
+
+-- Views y ejercicios
+DROP VIEW IF EXISTS contador_personas_por_planeta;
+
+CREATE OR REPLACE VIEW contador_personas_por_planeta AS
+SELECT civilizations.planet, COUNT(*) AS count, GROUP_CONCAT(civilizations.name) AS civilizations, SUM(civilizations.people) AS total_people
+FROM civilizations 
+GROUP BY civilizations.planet;
+
+SELECT * FROM contador_personas_por_planeta;
+
+
+DROP VIEW IF EXISTS contador_personas_por_planeta;
+
+SELECT * FROM contador_personas_por_planeta;
+
+CREATE OR REPLACE VIEW beneficios_por_planeta AS
+SELECT planets.planet, SUM(medicines.price - medicines.cost) AS total_benefits
+FROM medicines 
+JOIN planets ON medicines.id_planet = planets.id_planet
+GROUP BY planets.planet;
+
+
+SELECT * FROM beneficios_por_planeta;
+
+DROP PROCEDURE IF EXISTS kill_civilization;
+DELIMITER $$
+
+CREATE PROCEDURE kill_civilization(IN civilization_name VARCHAR(50))
+BEGIN
+    DECLARE civilization_count INT;
+    -- Verificar si la civilización ya está muerta
+    SELECT COUNT(*) INTO civilization_count
+    FROM civilizations
+    WHERE name = civilization_name AND dead = true;
+    
+    IF civilization_count > 0 THEN
+        SELECT CONCAT('No puedes matar otra vez a la civilización ', civilization_name) AS message;
+    ELSE
+        -- Actualizar la tabla de civilizaciones para marcar la civilización como muerta
+        UPDATE civilizations
+        SET dead = true
+        WHERE name = civilization_name;
+        
+        SELECT CONCAT('HA MUERTO la civilización ', civilization_name) AS message;
+    END IF;
+END $$
+DELIMITER ;
+
+
+CALL kill_civilization('Astralis');
+
+-- Views y ejercicios
+DROP VIEW IF EXISTS contador_personas_por_planeta;
+
+CREATE OR REPLACE VIEW contador_personas_por_planeta AS
+SELECT civilizations.planet, COUNT(*) AS count, GROUP_CONCAT(civilizations.name) AS civilizations, SUM(civilizations.people) AS total_people
+FROM civilizations 
+GROUP BY civilizations.planet;
+
+/*SELECT * FROM contador_personas_por_planeta;*/
+
+
+DROP VIEW IF EXISTS contador_personas_por_planeta;
+
+CREATE OR REPLACE VIEW contador_personas_por_planeta AS
+SELECT civilizations.planet, COUNT(*) AS count, GROUP_CONCAT(civilizations.name) AS civilizations, SUM(civilizations.people) AS total_people
+FROM civilizations 
+GROUP BY civilizations.planet;
+
+SELECT * FROM contador_personas_por_planeta;
+
+/*CREATE OR REPLACE VIEW beneficios_por_planeta AS
+SELECT planets.planet, SUM(medicines.price - medicines.cost) AS total_benefits
+FROM medicines 
+JOIN planets ON medicines.id_planet = planets.id_planet
+GROUP BY planets.planet;*/
+
+CREATE OR REPLACE VIEW beneficios_por_planeta AS
+SELECT p.planet, SUM(m.price - m.cost) * c.people AS total_benefits
+FROM medicines m
+JOIN planets p ON m.id_planet = p.id_planet
+JOIN civilizations c ON m.id_civilization = c.id_civilization
+GROUP BY p.planet;
+
+
+
+SELECT * FROM beneficios_por_planeta;
+
+DROP PROCEDURE IF EXISTS kill_civilization;
+DELIMITER $$
+
+CREATE PROCEDURE kill_civilization(IN civilization_name VARCHAR(50))
+BEGIN
+    DECLARE civilization_count INT;
+    -- Verificar si la civilización ya está muerta
+    SELECT COUNT(*) INTO civilization_count
+    FROM civilizations
+    WHERE name = civilization_name AND dead = true;
+    
+    IF civilization_count > 0 THEN
+        SELECT CONCAT('No puedes matar otra vez a la civilización ', civilization_name) AS message;
+    ELSE
+        -- Actualizar la tabla de civilizaciones para marcar la civilización como muerta
+        UPDATE civilizations
+        SET dead = true
+        WHERE name = civilization_name;
+        
+        SELECT CONCAT('HA MUERTO la civilización ', civilization_name) AS message;
+    END IF;
+END $$
+DELIMITER ;
+
+
+CALL kill_civilization('Astralis');
+
+
+
+
+
+
 
 
